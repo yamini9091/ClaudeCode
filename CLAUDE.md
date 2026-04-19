@@ -14,6 +14,7 @@ A browser-based game collection built as single-file HTML apps with embedded CSS
 
 ## Games
 - `index.html` — TicTacToe: two-player game with X/O neon styling
+- `saibaba.html` — Sai Baba Oracle: yes/no oracle with golden glow, blessing quotes, and particle effects
 
 ## Design Conventions
 - Dark gradient background (`#0f0c29` → `#302b63` → `#24243e`)
