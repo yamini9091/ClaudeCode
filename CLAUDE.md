@@ -1,0 +1,16 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+A browser-based game collection built as single-file HTML apps with embedded CSS and JS. No frameworks, no build tools, no dependencies.
+
+## Development
+- Open `.html` files directly in a browser to test (`open index.html` on macOS)
+- No build step, package manager, or dev server required
+
+## Design Conventions
+- Dark gradient background (`#0f0c29` → `#302b63` → `#24243e`)
+- Neon glow effects on interactive elements (red `#ff6b6b` for X, cyan `#48dbfb` for O)
+- Fixed **800x600** `.game-container` wrapping all game content
+- Single-file architecture: all HTML, CSS, and JS in one `.html` file per game
