@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Baba Oracle</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #eee;
+    overflow: hidden;
+  }
+  .game-container {
+    width: 800px; height: 600px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    gap: 20px;
+    border: 2px solid #3a3a6a;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(15,12,41,0.6), rgba(48,43,99,0.6));
+    box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 80px rgba(255,180,50,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-ring {
+    position: absolute;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,180,50,0.15);
+    top: 18px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 30px rgba(255,180,50,0.1), inset 0 0 30px rgba(255,180,50,0.05);
+    pointer-events: none;
+  }
+  h1 {
+    font-size: 2rem; letter-spacing: 5px; text-transform: uppercase;
+    background: linear-gradient(90deg, #feca57, #ff9f43, #ffd32a, #feca57);
+    background-size: 300% 300%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease infinite;
+    margin-top: 8px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .subtitle {
+    font-size: 0.85rem; letter-spacing: 3px; color: #a89060;
+    text-transform: uppercase;
+  }
+  .avatar {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 18px rgba(255,180,50,0.6));
+    animation: float 4s ease-in-out infinite;
+    line-height: 1;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .question-box {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    width: 520px;
+  }
+  .question-label {
+    font-size: 0.8rem; letter-spacing: 2px; color: #a89060; text-transform: uppercase;
+  }
+  textarea {
+    width: 100%; height: 64px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid #4a4a7a; border-radius: 12px;
+    color: #eee; font-size: 1rem; font-family: inherit;
+    padding: 10px 14px; resize: none; outline: none;
+    transition: border-color .3s, box-shadow .3s;
+    line-height: 1.4;
+  }
+  textarea:focus {
+    border-color: #feca57;
+    box-shadow: 0 0 12px rgba(254,202,87,0.2);
+  }
+  textarea::placeholder { color: #555; }
+  #ask-btn {
+    padding: 11px 40px; font-size: 1rem; font-weight: 700;
+    border: none; border-radius: 30px; cursor: pointer;
+    background: linear-gradient(135deg, #feca57, #ff9f43);
+    color: #1a1a2e; letter-spacing: 1px;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 0 20px rgba(254,202,87,0.3);
+  }
+  #ask-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 30px rgba(254,202,87,0.5);
+  }
+  #ask-btn:disabled {
+    opacity: 0.5; cursor: default; transform: none;
+  }
+  #answer-area {
+    min-height: 80px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px;
+  }
+  #answer-text {
+    font-size: 2.6rem; font-weight: 800; letter-spacing: 6px;
+    text-transform: uppercase; opacity: 0;
+    transition: opacity .4s, transform .4s;
+    transform: scale(0.7);
+  }
+  #answer-text.show {
+    opacity: 1; transform: scale(1);
+  }
+  #answer-text.yes {
+    color: #2ecc71;
+    text-shadow: 0 0 20px #2ecc7199, 0 0 40px #2ecc7155;
+  }
+  #answer-text.no {
+    color: #ff6b6b;
+    text-shadow: 0 0 20px #ff6b6b99, 0 0 40px #ff6b6b55;
+  }
+  #blessing {
+    font-size: 0.82rem; color: #a89060; letter-spacing: 1px;
+    font-style: italic; opacity: 0; transition: opacity .6s .3s;
+    text-align: center; max-width: 440px;
+  }
+  #blessing.show { opacity: 1; }
+  .particles {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .particle {
+    position: absolute; width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(254,202,87,0.7);
+    animation: rise linear forwards;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-300px) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="game-container">
+  <div class="particles" id="particles"></div>
+  <div class="glow-ring"></div>
+  <div class="avatar">🙏</div>
+  <h1>Sai Baba Oracle</h1>
+  <p class="subtitle">Shirdi Sai Baba &mdash; Seek His Guidance</p>
+
+  <div class="question-box">
+    <span class="question-label">Ask your yes / no question</span>
+    <textarea id="question" placeholder="e.g. Will everything be okay?" maxlength="200"></textarea>
+    <button id="ask-btn">Ask Baba</button>
+  </div>
+
+  <div id="answer-area">
+    <div id="answer-text"></div>
+    <div id="blessing"></div>
+  </div>
+</div>
+
+<script>
+const blessings = {
+  yes: [
+    "Sabka Malik Ek — Have faith, all is well.",
+    "Trust in His grace. The path is clear.",
+    "Baba smiles upon you. Move forward.",
+    "What He wills comes to pass. Proceed with love.",
+    "Fear not. His hand guides you."
+  ],
+  no: [
+    "Sabka Malik Ek — He protects you from unseen harm.",
+    "This too is His blessing. Another way awaits.",
+    "Patience is His gift. The right time will come.",
+    "Baba's love redirects you. Trust His wisdom.",
+    "He closes one door to open a better one."
+  ]
+};
+
+const askBtn = document.getElementById('ask-btn');
+const questionEl = document.getElementById('question');
+const answerText = document.getElementById('answer-text');
+const blessingEl = document.getElementById('blessing');
+const particlesEl = document.getElementById('particles');
+
+function spawnParticles() {
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = (20 + Math.random() * 60) + '%';
+    p.style.bottom = (10 + Math.random() * 30) + '%';
+    p.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    p.style.animationDelay = (Math.random() * 0.8) + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 5) + 'px';
+    particlesEl.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+
+askBtn.addEventListener('click', () => {
+  if (!questionEl.value.trim()) {
+    questionEl.focus();
+    return;
+  }
+
+  answerText.className = '';
+  answerText.textContent = '';
+  blessingEl.className = '';
+  blessingEl.textContent = '';
+  askBtn.disabled = true;
+
+  setTimeout(() => {
+    const isYes = Math.random() < 0.5;
+    const key = isYes ? 'yes' : 'no';
+    const msgs = blessings[key];
+
+    answerText.textContent = isYes ? 'Yes' : 'No';
+    answerText.className = 'show ' + key;
+    blessingEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    blessingEl.className = 'show';
+    spawnParticles();
+    askBtn.disabled = false;
+  }, 900);
+});
+
+questionEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    askBtn.click();
+  }
+});
+</script>
+</body>
+</html>
