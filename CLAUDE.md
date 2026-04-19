@@ -9,6 +9,9 @@ A browser-based game collection built as single-file HTML apps with embedded CSS
 - Open `.html` files directly in a browser to test (`open index.html` on macOS)
 - No build step, package manager, or dev server required
 
+## Games
+- `index.html` — TicTacToe: two-player game with X/O neon styling
+
 ## Design Conventions
 - Dark gradient background (`#0f0c29` → `#302b63` → `#24243e`)
 - Neon glow effects on interactive elements (red `#ff6b6b` for X, cyan `#48dbfb` for O)
