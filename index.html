@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #eee;
+    overflow: hidden;
+  }
+  .game-container {
+    width: 800px; height: 600px;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    gap: 24px;
+    border: 2px solid #3a3a6a;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(15,12,41,0.6), rgba(48,43,99,0.6));
+    box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 80px rgba(72,219,251,0.05);
+  }
+  h1 {
+    font-size: 2.8rem; letter-spacing: 4px; text-transform: uppercase;
+    background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd);
+    background-size: 300% 300%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbow 3s ease infinite;
+  }
+  @keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  #status {
+    font-size: 1.3rem; min-height: 1.5em;
+    font-weight: 600; letter-spacing: 1px;
+    transition: color .3s, text-shadow .3s;
+  }
+  #status.x { color: #ff6b6b; text-shadow: 0 0 12px #ff6b6b88; }
+  #status.o { color: #48dbfb; text-shadow: 0 0 12px #48dbfb88; }
+  #board {
+    display: grid; grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px); gap: 10px;
+    perspective: 600px;
+  }
+  .cell {
+    background: linear-gradient(145deg, #1e1e3f, #2a2a5a);
+    border: 2px solid #3a3a6a; border-radius: 14px;
+    font-size: 3rem; font-weight: bold; cursor: pointer;
+    color: #eee; transition: all .2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,.3);
+  }
+  .cell:hover:not(.taken) {
+    background: linear-gradient(145deg, #2a2a5a, #3a3a7a);
+    transform: scale(1.08) rotateY(5deg);
+    border-color: #feca57;
+    box-shadow: 0 0 20px rgba(254,202,87,.2);
+  }
+  .cell.taken { cursor: default; }
+  .cell.x {
+    color: #ff6b6b;
+    text-shadow: 0 0 15px #ff6b6b99;
+    border-color: #ff6b6b55;
+  }
+  .cell.o {
+    color: #48dbfb;
+    text-shadow: 0 0 15px #48dbfb99;
+    border-color: #48dbfb55;
+  }
+  .cell.win {
+    animation: pulse 0.6s ease infinite alternate;
+  }
+  .cell.win.x {
+    background: linear-gradient(145deg, #ff6b6b22, #ff6b6b44);
+    border-color: #ff6b6b; box-shadow: 0 0 25px #ff6b6b66;
+  }
+  .cell.win.o {
+    background: linear-gradient(145deg, #48dbfb22, #48dbfb44);
+    border-color: #48dbfb; box-shadow: 0 0 25px #48dbfb66;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+  .cell.pop {
+    animation: pop .25s ease;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.5); opacity: 0.5; }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  #restart {
+    padding: 12px 32px; font-size: 1.05rem; font-weight: 600;
+    border: 2px solid transparent; border-radius: 30px;
+    background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
+    background-size: 200% 200%; animation: rainbow 3s ease infinite;
+    color: #1a1a2e; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    letter-spacing: 1px;
+  }
+  #restart:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(255,107,107,.4), 0 0 25px rgba(72,219,251,.4);
+  }
+</style>
+</head>
+<body>
+<div class="game-container">
+<h1>Tic Tac Toe!</h1>
+<div id="status">X's turn</div>
+<div id="board"></div>
+<button id="restart">Restart</button>
+</div>
+
+<script>
+const board = document.getElementById('board');
+const status = document.getElementById('status');
+const restartBtn = document.getElementById('restart');
+const wins = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+let cells, current, gameOver;
+
+function init() {
+  board.innerHTML = '';
+  cells = Array(9).fill('');
+  current = 'X';
+  gameOver = false;
+  status.textContent = "X's turn";
+  status.className = 'x';
+  for (let i = 0; i < 9; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'cell';
+    btn.dataset.i = i;
+    btn.addEventListener('click', handleClick);
+    board.appendChild(btn);
+  }
+}
+
+function handleClick(e) {
+  const i = e.target.dataset.i;
+  if (gameOver || cells[i]) return;
+  cells[i] = current;
+  e.target.textContent = current;
+  e.target.classList.add('taken', current.toLowerCase(), 'pop');
+
+  const winCombo = wins.find(c => c.every(j => cells[j] === current));
+  if (winCombo) {
+    gameOver = true;
+    status.textContent = `${current} wins!`;
+    status.className = current.toLowerCase();
+    winCombo.forEach(j => board.children[j].classList.add('win'));
+    return;
+  }
+  if (cells.every(c => c)) {
+    gameOver = true;
+    status.textContent = "It's a draw!";
+    status.className = '';
+    return;
+  }
+  current = current === 'X' ? 'O' : 'X';
+  status.textContent = `${current}'s turn`;
+  status.className = current.toLowerCase();
+}
+
+restartBtn.addEventListener('click', init);
+init();
+</script>
+</body>
+</html>
