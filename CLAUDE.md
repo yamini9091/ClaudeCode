@@ -9,6 +9,9 @@ A browser-based game collection built as single-file HTML apps with embedded CSS
 - Open `.html` files directly in a browser to test (`open index.html` on macOS)
 - No build step, package manager, or dev server required
 
+## Pre-Commit Rule (MANDATORY)
+**Always run `/code-review` before any `git commit`.** Do not commit if the review verdict is BLOCKED (any BLOCKER-severity issues remain). Resolve all BLOCKERs first, then re-run `/code-review` to confirm the verdict is APPROVED before committing.
+
 ## Games
 - `index.html` — TicTacToe: two-player game with X/O neon styling
 
